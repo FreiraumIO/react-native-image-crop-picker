@@ -84,6 +84,8 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
     private final String DEFAULT_WIDGET_COLOR = "#03A9F4";
     private int width = 200;
     private int height = 200;
+    private int maxResultWidth = 0;
+    private int maxResultHeight = 0;
 
     private Uri mCameraCaptureURI;
     private String mCurrentPhotoPath;
@@ -113,6 +115,8 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         includeBase64 = options.hasKey("includeBase64") && options.getBoolean("includeBase64");
         width = options.hasKey("width") ? options.getInt("width") : width;
         height = options.hasKey("height") ? options.getInt("height") : height;
+        maxResultWidth = options.hasKey("maxResultWidth") ? options.getInt("maxResultWidth") : maxResultWidth;
+        maxResultHeight = options.hasKey("maxResultHeight") ? options.getInt("maxResultHeight") : maxResultHeight;
         cropping = options.hasKey("cropping") ? options.getBoolean("cropping") : cropping;
         cropperTintColor = options.hasKey("cropperTintColor") ? options.getString("cropperTintColor") : cropperTintColor;
         cropperCircleOverlay = options.hasKey("cropperCircleOverlay") ? options.getBoolean("cropperCircleOverlay") : cropperCircleOverlay;
@@ -568,15 +572,18 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         if (enableRotationGesture) {
             // UCropActivity.ALL = enable both rotation & scaling
             options.setAllowedGestures(
-                UCropActivity.ALL, // When 'scale'-tab active
-                UCropActivity.ALL, // When 'rotate'-tab active
-                UCropActivity.ALL  // When 'aspect ratio'-tab active
+                    UCropActivity.ALL, // When 'scale'-tab active
+                    UCropActivity.ALL, // When 'rotate'-tab active
+                    UCropActivity.ALL  // When 'aspect ratio'-tab active
             );
         }
         configureCropperColors(options);
 
-        UCrop instance = UCrop.of(uri, Uri.fromFile(new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg")))
-                .withMaxResultSize(width, height);
+        UCrop instance = UCrop.of(uri, Uri.fromFile(new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg")));
+
+        if (maxResultHeight > 0 && maxResultWidth > 0) {
+            instance.withMaxResultSize(maxResultWidth, maxResultHeight);
+        }
 
         if (customAspectRatio) {
             instance.withAspectRatio(width, height);
