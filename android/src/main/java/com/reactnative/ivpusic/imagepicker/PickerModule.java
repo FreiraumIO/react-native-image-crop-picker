@@ -72,6 +72,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
     private boolean hideBottomControls = false;
     private boolean enableRotationGesture = false;
     private boolean freestyle = false;
+    private boolean customAspectRatio = true;
     private ReadableMap options;
 
 
@@ -119,6 +120,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         hideBottomControls = options.hasKey("hideBottomControls") ? options.getBoolean("hideBottomControls") : hideBottomControls;
         enableRotationGesture = options.hasKey("enableRotationGesture") ? options.getBoolean("enableRotationGesture") : enableRotationGesture;
         freestyle = options.hasKey("freestyle") ? options.getBoolean("freestyle") : freestyle;
+        customAspectRatio = options.hasKey("customAspectRatio") ? options.getBoolean("customAspectRatio") : customAspectRatio;
         this.options = options;
     }
 
@@ -573,10 +575,14 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         }
         configureCropperColors(options);
 
-        UCrop.of(uri, Uri.fromFile(new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg")))
-                .withMaxResultSize(width, height)
-                .withAspectRatio(width, height)
-                .withOptions(options)
+        UCrop instance = UCrop.of(uri, Uri.fromFile(new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg")))
+                .withMaxResultSize(width, height);
+
+        if (customAspectRatio) {
+            instance.withAspectRatio(width, height);
+        }
+
+        instance.withOptions(options)
                 .start(activity);
     }
 
