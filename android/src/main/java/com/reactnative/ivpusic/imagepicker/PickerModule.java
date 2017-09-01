@@ -71,6 +71,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
     private boolean showCropGuidelines = true;
     private boolean hideBottomControls = false;
     private boolean enableRotationGesture = false;
+    private boolean freestyle = false;
     private ReadableMap options;
 
 
@@ -117,6 +118,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         showCropGuidelines = options.hasKey("showCropGuidelines") ? options.getBoolean("showCropGuidelines") : showCropGuidelines;
         hideBottomControls = options.hasKey("hideBottomControls") ? options.getBoolean("hideBottomControls") : hideBottomControls;
         enableRotationGesture = options.hasKey("enableRotationGesture") ? options.getBoolean("enableRotationGesture") : enableRotationGesture;
+        freestyle = options.hasKey("freestyle") ? options.getBoolean("freestyle") : freestyle;
         this.options = options;
     }
 
@@ -560,6 +562,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         options.setCircleDimmedLayer(cropperCircleOverlay);
         options.setShowCropGrid(showCropGuidelines);
         options.setHideBottomControls(hideBottomControls);
+        options.setFreeStyleCropEnabled(freestyle);
         if (enableRotationGesture) {
             // UCropActivity.ALL = enable both rotation & scaling
             options.setAllowedGestures(
