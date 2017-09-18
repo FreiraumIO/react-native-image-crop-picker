@@ -576,6 +576,12 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
                     UCropActivity.ALL, // When 'rotate'-tab active
                     UCropActivity.ALL  // When 'aspect ratio'-tab active
             );
+        } else {
+            options.setAllowedGestures(
+                    0, // When 'scale'-tab active
+                    0, // When 'rotate'-tab active
+                    0  // When 'aspect ratio'-tab active
+            );
         }
         configureCropperColors(options);
 
